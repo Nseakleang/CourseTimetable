@@ -5,12 +5,25 @@
  */
 package form;
 
+import Event.Connect_db;
+import Event.TableModel;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Chenhai
  */
 public class lstFaculty extends javax.swing.JPanel {
     
+    private static Connection con;
+    private static Statement stm;
+    private ResultSet rs;
     public static Dashboard dashboard;
 
     /**
@@ -18,6 +31,7 @@ public class lstFaculty extends javax.swing.JPanel {
      */
     public lstFaculty() {
         initComponents();
+        loadData();
     }
 
     /**
@@ -35,7 +49,11 @@ public class lstFaculty extends javax.swing.JPanel {
         jbtUpdate = new javax.swing.JButton();
         jbtDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableFaculty = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false;   //Disallow the editing of any cell
+            }
+        };
         jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(51, 0, 102));
@@ -72,20 +90,25 @@ public class lstFaculty extends javax.swing.JPanel {
         jbtDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/button/Delete.png"))); // NOI18N
         jbtDelete.setText("Delete");
         jbtDelete.setName("Delete"); // NOI18N
+        jbtDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbtDeleteMouseClicked(evt);
+            }
+        });
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableFaculty.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableFaculty.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {"001", "Test1", "", null},
+                {"002", "Test2", null, null},
+                {"003", "Test3", null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Course Code", "Course Name", "Prerquisites", "Creadit Hour", "Group Course"
+                "Faculty Code", "Faculty Name", "Contact", "Description"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableFaculty);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -138,15 +161,52 @@ public class lstFaculty extends javax.swing.JPanel {
         dashboard.setEnabled(false);
     }//GEN-LAST:event_jbtAddNewMouseClicked
 
+    private void jbtDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbtDeleteMouseClicked
+        int selectedRow = jTableFaculty.getSelectedRow();
+        if (selectedRow != -1) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to delete?", "Delete", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                try {
+                    rs.beforeFirst();
+                    for (int i = 0; i <= selectedRow; i++) {
+                        rs.next();
+                    }
+                    rs.deleteRow();
+                    loadData();
+                    JOptionPane.showMessageDialog(null, "Delete successfully!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLException ex) {
+                    Logger.getLogger(lstFaculty.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Delete unsuccessful!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(jScrollPane1, "Please select row to delete!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtDeleteMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableFaculty;
     private javax.swing.JButton jbtAddNew;
     private javax.swing.JButton jbtDelete;
     private javax.swing.JButton jbtUpdate;
     private javax.swing.JComboBox jcFaculty;
     private javax.swing.JLabel jlFacultyName;
     // End of variables declaration//GEN-END:variables
+
+    private void loadData() {
+        try {
+            con = Connect_db.getConnection();
+            stm = Connect_db.getStatement();
+            if (con != null && stm != null) {
+                rs = stm.executeQuery("SELECT * FROM getFaculty");
+                jTableFaculty.setModel(TableModel.buildTableModel(rs));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(lstFaculty.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

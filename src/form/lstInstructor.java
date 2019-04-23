@@ -35,7 +35,7 @@ public class lstInstructor extends javax.swing.JPanel {
         jbtUpdate = new javax.swing.JButton();
         jbtDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableInstructor = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(51, 0, 102));
@@ -73,19 +73,19 @@ public class lstInstructor extends javax.swing.JPanel {
         jbtDelete.setText("Delete");
         jbtDelete.setName("Delete"); // NOI18N
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableInstructor.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableInstructor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Instructor ID", "Instructor Name", "Sex", "Contact", "Address", "Faculty", "Department", "Course", "Status"
+                "Instructor ID", "Instructor Name", "Sex", "Specialty", "Contact", "Address", "Department", "Status"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableInstructor);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -142,7 +142,7 @@ public class lstInstructor extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableInstructor;
     private javax.swing.JButton jbtAddNew;
     private javax.swing.JButton jbtDelete;
     private javax.swing.JButton jbtUpdate;

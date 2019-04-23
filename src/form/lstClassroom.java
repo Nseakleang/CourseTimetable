@@ -5,12 +5,24 @@
  */
 package form;
 
+import Event.Connect_db;
+import Event.TableModel;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Chenhai
  */
 public class lstClassroom extends javax.swing.JPanel {
     
+    private static Connection con;
+    private static Statement stm;
+    private ResultSet rs;
     public static Dashboard dashboard;
 
     /**
@@ -18,6 +30,7 @@ public class lstClassroom extends javax.swing.JPanel {
      */
     public lstClassroom() {
         initComponents();
+        loadData();
     }
 
     /**
@@ -35,7 +48,7 @@ public class lstClassroom extends javax.swing.JPanel {
         jbtUpdate = new javax.swing.JButton();
         jbtDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableClassroom = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jlFacultyName1 = new javax.swing.JLabel();
         jcFaculty1 = new javax.swing.JComboBox();
@@ -75,8 +88,8 @@ public class lstClassroom extends javax.swing.JPanel {
         jbtDelete.setText("Delete");
         jbtDelete.setName("Delete"); // NOI18N
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableClassroom.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableClassroom.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -87,7 +100,7 @@ public class lstClassroom extends javax.swing.JPanel {
                 "Classroom No", "Building", "Capacity", "Description"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableClassroom);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -159,7 +172,7 @@ public class lstClassroom extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableClassroom;
     private javax.swing.JButton jbtAddNew;
     private javax.swing.JButton jbtDelete;
     private javax.swing.JButton jbtUpdate;
@@ -168,4 +181,17 @@ public class lstClassroom extends javax.swing.JPanel {
     private javax.swing.JLabel jlFacultyName;
     private javax.swing.JLabel jlFacultyName1;
     // End of variables declaration//GEN-END:variables
+
+    private void loadData() {
+        try {
+            con = Connect_db.getConnection();
+            stm = Connect_db.getStatement();
+            if (con != null && stm != null) {
+                rs = stm.executeQuery("SELECT * FROM getClassroom");
+                jTableClassroom.setModel(TableModel.buildTableModel(rs));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(lstFaculty.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
